@@ -1,3 +1,8 @@
+# Ignore specific app file
+01-App/app-v1.py
+01-App/app-v2.py
+01-App/app-v3.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
