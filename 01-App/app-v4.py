@@ -15,17 +15,16 @@ from mistralai import Mistral # For OCR processing
 import base64
 
 # --- Configuration ---
-# (YC startups often use .env files or cloud secret managers for production)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 COHERE_API_KEY = "9umxICMmVXpk6trBETGkfCPvHBzCV9TSjgyEVxWP"
 COHERE_AYA_MODEL = "c4ai-aya-vision-32b" # Check Cohere documentation for latest vision-capable models on v2/chat
 YOLO_MODEL_PATH = os.path.join(BASE_DIR, "../03-Models/yolov8m.pt") # <<< IMPORTANT: Update this path to your YOLOv8 model file (.pt)
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "wuJauJ5WhHxpOXPv3eFkG1lGlq3Y0yXK") # Get from environment variable
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "faMBWDxzNp3lGzbJCSch7tEavzBVf1bX") # Get from environment variable
 
 # Initialize Mistral client
 mistral_client = Mistral(api_key=MISTRAL_API_KEY) if MISTRAL_API_KEY != "YOUR_MISTRAL_API_KEY" else None
 
-# Placeholder for custom model integration
+# Placeholder for custom model integration (next version of prototype)
 CUSTOM_MODEL_CONFIG = {
     "api_key": "YOUR_CUSTOM_MODEL_API_KEY",
     "endpoint": "YOUR_CUSTOM_MODEL_ENDPOINT",
@@ -52,11 +51,9 @@ def analyze_image_with_yolo(image_bytes, model):
     if not image_bytes:
         return "No image data provided for analysis."
     try:
-        pil_image = PILImage.open(io.BytesIO(image_bytes))
         # Convert PIL image to OpenCV format (NumPy array)
-        # YOLO expects images in BGR format if using OpenCV directly,
-        # but PILImage.open gives RGB. The YOLO library handles this conversion.
-        
+        pil_image = PILImage.open(io.BytesIO(image_bytes))
+                
         results = model(pil_image) # Perform inference
         
         detections_summary = []
@@ -118,9 +115,7 @@ def analyze_sop_with_cohere(ocr_result):
     
     try:
         co = cohere.Client(COHERE_API_KEY)
-        
-        # Combine all pages' markdown content
-        # OCR result is an object, not a dictionary, so use attribute access
+
         full_text = "\n".join(page.markdown for page in ocr_result.pages)
         
         prompt = f"""You are an AI assistant analyzing a Standard Operating Procedure (SOP) document for container repairs.
@@ -325,14 +320,14 @@ def call_cohere_aya_yolo_model(ticket_data, age_cost_thresholds, repair_codes_ne
 
     prompt += yolo_analysis_prompt_section
 
-    # This pre-emptive check is crucial. If data is missing, AI can't make a proper decision.
+    # Check so AI can make a proper decision
     if missing_images_for_codes_internal_check:
         missing_data_details = f"Mandatory images missing for repair codes: {', '.join(missing_images_for_codes_internal_check)}."
         return {
-            "decision": "MANUAL_REVIEW", # Changed from DISAPPROVE directly to MANUAL_REVIEW with missing data flag
-            "confidence_score": 1.0, # High confidence that data is missing
+            "decision": "MANUAL_REVIEW",
+            "confidence_score": 1.0, 
             "reasoning": f"Cannot proceed with AI approval/disapproval. {missing_data_details} Please upload them.",
-            "missing_data_request": missing_data_details # This signals what is needed
+            "missing_data_request": missing_data_details #
         }
 
     prompt += """
@@ -546,9 +541,7 @@ def display_ticket_details(ticket, expand_details=False):
             for media_item in ticket['media']:
                 assoc_code = f" (for {media_item.get('repair_code_association')})" if media_item.get('repair_code_association') else ""
                 st.markdown(f"- {media_item.get('filename', 'N/A')} ({media_item.get('type', 'N/A')}){assoc_code}")
-                # If 'bytes' were stored, you could offer a download:
-                # if 'bytes' in media_item:
-                # st.download_button(f"Download {media_item.get('filename')}", media_item['bytes'], media_item.get('filename'))
+               
         else: st.write("No media files attached.")
         
         st.markdown(f"**Other Notes:** {ticket.get('other_notes', 'None')}")
@@ -593,7 +586,7 @@ def display_ticket_details(ticket, expand_details=False):
             st.markdown("---")
             st.write("**Provide Additional Data:**")
             # Example: If missing images were requested, allow upload for those specific codes
-            # This part needs to know WHAT data is missing. For now, assumes images for codes listed in ai_missing_data_request.
+            # This part needs to know WHAT data is missing. For now, assumes images for codes listed in ai_missing_data_request (Update in next prototype version)
             
             # Attempt to parse missing codes if the request is about images
             missing_codes_str = ticket.get('ai_missing_data_request', '')
@@ -857,6 +850,7 @@ elif page == "AI Training & Settings (GSC)":
     # SOP Upload and Processing Section
     st.subheader("Alternative: Upload SOP Documents")
     st.markdown("Upload Standard Operating Procedure documents to automatically extract repair codes requiring images.")
+    st.markdown("""For demo purposes, upload the PDF document "temp_sop.pdf" provided by the github repo in folder "01-App". The system will process it using Mistral OCR and analyze the content with Cohere to identify relevant repair codes.""")
     
     uploaded_sop = st.file_uploader(
         "Upload SOP Document (PDF)",
@@ -907,24 +901,12 @@ elif page == "AI Training & Settings (GSC)":
                        cols_fb[1].button("👎 Bad", key=f"down_fb_{ticket['ticket_id']}"):
                         evaluation = "Good" if cols_fb[0].button else "Bad" # This logic needs fixing, button state doesn't work like this after click
                         # A better way: store button click in a variable
-                        # For now, assume only one can be "true" per run if logic were outside columns
-                        # Correct way for buttons:
-                        # clicked_good = cols_fb[0].button("👍 Good", key=f"up_fb_{ticket['ticket_id']}")
-                        # clicked_bad = cols_fb[1].button("👎 Bad", key=f"down_fb_{ticket['ticket_id']}")
-                        # if clicked_good or clicked_bad:
-                        #    evaluation = "Good" if clicked_good else "Bad"
+                        # For now, assume only one can be "true" per run if logic were outside columns (Further update in next prototype version)
 
                         # Simplified for now - this part of feedback needs robust button state handling if it were more complex
                         feedback_val = "Good" if st.session_state[f"up_fb_{ticket['ticket_id']}"] else "Bad" # This is not right
                         comment_val = st.session_state.get(f"comment_fb_{ticket['ticket_id']}", "")
-
-                        # The button handling for feedback needs a slight redesign for Streamlit's execution model.
-                        # The simplest is to have separate submit buttons or handle it within a form.
-                        # For this pass, I'll leave the basic structure and note this as an area for refinement.
-                        # A quick fix for immediate effect:
-                        # Create a radio or select for feedback, then a submit button.
-
-                        # Let's try a simpler feedback mechanism for now
+                        
                         feedback_choice = st.radio("Your evaluation:", ("Good", "Bad", "Not Set"), index=2, key=f"eval_radio_{ticket['ticket_id']}", horizontal=True)
                         feedback_comment = cols_fb[2].text_input("Comment", key=f"comment_fb_{ticket['ticket_id']}")
                         if st.button("Submit Feedback", key=f"submit_fb_{ticket['ticket_id']}"):
@@ -1008,12 +990,11 @@ elif page == "Submit New Estimate (Inspectors)":
             "Upload images, videos, or documents", 
             accept_multiple_files=True, 
             key="submit_media_uploader",
-            type=['png', 'jpg', 'jpeg', 'mp4', 'pdf', 'mov'] # Define acceptable types
+            type=['png', 'jpg', 'jpeg', 'mp4', 'pdf', 'mov']
         )
         # Allow associating uploaded files with repair codes
         # This part is tricky within a single form submission if files are processed before main submit.
-        # For simplicity, we'll process associations on the main submit button.
-        # For a better UX, this would be more dynamic.
+        # For simplicity, we'll process associations on the main submit button (Update in next prototype version)
         
         st.session_state.current_media_for_new_ticket_with_assoc = [] # Temp store for display before submit
         if uploaded_files:
@@ -1025,8 +1006,6 @@ elif page == "Submit New Estimate (Inspectors)":
                     options=[""] + current_repair_codes_in_ticket, # Can only associate with codes already added
                     key=f"submit_media_assoc_{i}"
                 )
-                # We can't store the file object directly here if clear_on_submit is True for the main form.
-                # We'd need to process it on submit. For now, let's just get the names and associations.
                 st.session_state.current_media_for_new_ticket_with_assoc.append({
                     "original_file_obj": uploaded_file, # Keep ref for processing on submit
                     "filename": uploaded_file.name,
@@ -1046,7 +1025,6 @@ elif page == "Submit New Estimate (Inspectors)":
                 # Process media from st.session_state.current_media_for_new_ticket_with_assoc
                 final_media_list = []
                 for media_item_info in st.session_state.current_media_for_new_ticket_with_assoc:
-                    # In a real app, uploaded_file.original_file_obj.getvalue() would be read and saved to storage.
                     # For demo, just storing metadata.
                     final_media_list.append({
                         "filename": media_item_info["filename"],
@@ -1102,7 +1080,7 @@ elif page == "Submit New Estimate (Inspectors)":
                 st.session_state.current_repairs_for_new_ticket = [] # Clear for next form
                 st.session_state.current_media_for_new_ticket_with_assoc = [] # Clear for next form
                 st.success(f"New ticket {ticket_id} submitted and processed. Status: {new_ticket['status']}")
-                # No st.rerun() due to clear_on_submit=True and form_submit_button behavior
+
 
 # --- Footer ---
 st.sidebar.markdown("---")

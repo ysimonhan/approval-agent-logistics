@@ -2,6 +2,10 @@
 01-App/app-v1.py
 01-App/app-v2.py
 01-App/app-v3.py
+.gitignore
+NGROK_SETUP.md
+start_app.sh 
+stop_app.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
