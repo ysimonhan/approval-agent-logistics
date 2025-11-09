@@ -16,18 +16,18 @@ import base64
 
 # --- Configuration ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-COHERE_API_KEY = "9umxICMmVXpk6trBETGkfCPvHBzCV9TSjgyEVxWP"
-COHERE_AYA_MODEL = "c4ai-aya-vision-32b" # Check Cohere documentation for latest vision-capable models on v2/chat
-YOLO_MODEL_PATH = os.path.join(BASE_DIR, "../03-Models/yolov8m.pt") # <<< IMPORTANT: Update this path to your YOLOv8 model file (.pt)
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "faMBWDxzNp3lGzbJCSch7tEavzBVf1bX") # Get from environment variable
+COHERE_API_KEY = os.getenv("COHERE_API_KEY", "YOUR_COHERE_API_KEY_HERE")
+COHERE_AYA_MODEL = "c4ai-aya-vision-32b" 
+YOLO_MODEL_PATH = os.path.join(BASE_DIR, "../03-Models/yolov8m.pt") 
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "YOUR_MISTRAL_API_KEY") 
 
 # Initialize Mistral client
 mistral_client = Mistral(api_key=MISTRAL_API_KEY) if MISTRAL_API_KEY != "YOUR_MISTRAL_API_KEY" else None
 
 # Placeholder for custom model integration (next version of prototype)
 CUSTOM_MODEL_CONFIG = {
-    "api_key": "YOUR_CUSTOM_MODEL_API_KEY",
-    "endpoint": "YOUR_CUSTOM_MODEL_ENDPOINT",
+    "api_key": os.getenv("CUSTOM_MODEL_API_KEY", "YOUR_CUSTOM_MODEL_API_KEY"),
+    "endpoint": os.getenv("CUSTOM_MODEL_ENDPOINT", "YOUR_CUSTOM_MODEL_ENDPOINT"),
     # Add other necessary parameters for your custom model
 }
 
@@ -109,8 +109,8 @@ def process_sop_with_mistral_ocr(uploaded_file):
 
 def analyze_sop_with_cohere(ocr_result):
     """Analyze OCR results with Cohere Aya to extract repair codes requiring images."""
-    if not COHERE_API_KEY:
-        st.error("Cohere API key not configured.")
+    if not COHERE_API_KEY or COHERE_API_KEY == "YOUR_COHERE_API_KEY_HERE":
+        st.error("Cohere API key not configured. Please set COHERE_API_KEY environment variable.")
         return None
     
     try:
@@ -158,8 +158,8 @@ def analyze_sop_with_cohere(ocr_result):
 
 def chat_with_ai_agent(ticket_data, user_question, chat_history):
     """Chat with the Cohere Aya AI agent about the ticket decision."""
-    if not COHERE_API_KEY:
-        st.error("Cohere API key not configured.")
+    if not COHERE_API_KEY or COHERE_API_KEY == "YOUR_COHERE_API_KEY_HERE":
+        st.error("Cohere API key not configured. Please set COHERE_API_KEY environment variable.")
         return None
     
     try:
