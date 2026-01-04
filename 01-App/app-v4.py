@@ -415,35 +415,35 @@ def add_sample_tickets_if_needed():
                 "ai_chat": [], "other_notes": ""
             },
     
-            {
-                "ticket_id": generate_ticket_id(), "container_id": "CON005", "company": "Maersk", "total_cost_estimate": 600,
-                "container_age": 3, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
-                "repairs": [{"code": "CRK003", "description": "Frame crack repair"}, {"code": "SCT002", "description": "Scratch removal"}],
-                "media": [{"filename": "frame_crack_con005.jpg", "type": "image", "repair_code_association": "CRK003"}],
-                "ai_chat": [], "other_notes": "Moderate damage observed."
-            },
-            {
-                "ticket_id": generate_ticket_id(), "container_id": "CON006", "company": "Hapag", "total_cost_estimate": 450,
-                "container_age": 5, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
-                "repairs": [{"code": "DNT001", "description": "Minor dent repair"}, {"code": "SCT002", "description": "Scratch removal"}],
-                "media": [{"filename": "dent_scratch_con006.jpg", "type": "image"}],
-                "ai_chat": [], "other_notes": "Minor wear and tear."
-            },
-            {
-                "ticket_id": generate_ticket_id(), "container_id": "CON007", "company": "MSC", "total_cost_estimate": 1100,
-                "container_age": 2, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
-                "repairs": [{"code": "DMG001", "description": "Severe structural damage"}, {"code": "FLR001", "description": "Floor replacement"}],
-                "media": [{"filename": "structural_damage_con007.jpg", "type": "image", "repair_code_association": "DMG001"}],
-                "ai_chat": [], "other_notes": "Urgent repair required."
-            },
+            # {
+            #     "ticket_id": generate_ticket_id(), "container_id": "CON005", "company": "Maersk", "total_cost_estimate": 600,
+            #     "container_age": 3, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
+            #     "repairs": [{"code": "CRK003", "description": "Frame crack repair"}, {"code": "SCT002", "description": "Scratch removal"}],
+            #     "media": [{"filename": "frame_crack_con005.jpg", "type": "image", "repair_code_association": "CRK003"}],
+            #     "ai_chat": [], "other_notes": "Moderate damage observed."
+            # },
+            # {
+            #     "ticket_id": generate_ticket_id(), "container_id": "CON006", "company": "Hapag", "total_cost_estimate": 450,
+            #     "container_age": 5, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
+            #     "repairs": [{"code": "DNT001", "description": "Minor dent repair"}, {"code": "SCT002", "description": "Scratch removal"}],
+            #     "media": [{"filename": "dent_scratch_con006.jpg", "type": "image"}],
+            #     "ai_chat": [], "other_notes": "Minor wear and tear."
+            # },
+            # {
+            #     "ticket_id": generate_ticket_id(), "container_id": "CON007", "company": "MSC", "total_cost_estimate": 1100,
+            #     "container_age": 2, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
+            #     "repairs": [{"code": "DMG001", "description": "Severe structural damage"}, {"code": "FLR001", "description": "Floor replacement"}],
+            #     "media": [{"filename": "structural_damage_con007.jpg", "type": "image", "repair_code_association": "DMG001"}],
+            #     "ai_chat": [], "other_notes": "Urgent repair required."
+            # },
     
-            {
-                "ticket_id": generate_ticket_id(), "container_id": "CON004", "company": "CGM", "total_cost_estimate": 900,
-                "container_age": 2, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
-                "repairs": [{"code": "DMG001", "description": "Frame damage report"}, {"code": "WEL001", "description": "Welding required"}],
-                "media": [{"filename": "frame_damage_con004.jpg", "type": "image", "repair_code_association": "DMG001"}],
-                "ai_chat": [], "other_notes": "Impact damage noted."
-            }
+            # {
+            #     "ticket_id": generate_ticket_id(), "container_id": "CON004", "company": "CGM", "total_cost_estimate": 900,
+            #     "container_age": 2, "status": "Pending AI Review", "submitted_date": get_current_timestamp(),
+            #     "repairs": [{"code": "DMG001", "description": "Frame damage report"}, {"code": "WEL001", "description": "Welding required"}],
+            #     "media": [{"filename": "frame_damage_con004.jpg", "type": "image", "repair_code_association": "DMG001"}],
+            #     "ai_chat": [], "other_notes": "Impact damage noted."
+            # }
         ]
         for raw_ticket in sample_tickets_data_raw:
             ticket_id = generate_ticket_id()
