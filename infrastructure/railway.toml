@@ -1,0 +1,12 @@
+"$schema" = "https://railway.com/railway.schema.json"
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "infrastructure/Dockerfile"
+
+[deploy]
+startCommand = "/bin/sh -c \"exec python -m streamlit run src/logistics_approval_agent/web/streamlit_app.py --server.address=0.0.0.0 --server.port=${PORT:-8501} --server.headless=true\""
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

@@ -186,6 +186,8 @@ cython_debug/
 # Project-specific ignores
 02-Data/
 03-Models/
+data/
+models/
 *.pt
 *.jpg
 *.png
