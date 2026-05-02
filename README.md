@@ -1,6 +1,6 @@
 # 🚢 AI Repair Ticket Approval Platform
 
-A simple and straightforward Streamlit app that is powered by a mix of LLM, OCR, and object detection to empower approval teams to manage the overwhelming amount of repair tickets of shipment containers :) Check out the prototype here: https://5dc16b035bc5.ngrok-free.app
+A simple and straightforward Streamlit app that is powered by a mix of LLM, OCR, and object detection to empower approval teams to manage the overwhelming amount of repair tickets of shipment containers :) Check out the prototype here: https://approval-agent-logistics-production.up.railway.app/
 
 ## ⚡ Key Features
 
