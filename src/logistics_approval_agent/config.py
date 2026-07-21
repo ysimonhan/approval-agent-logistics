@@ -44,11 +44,7 @@ def get_settings() -> Settings:
     data_dir = Path(os.getenv("DATA_DIR", project_root / "data"))
     models_dir = Path(os.getenv("MODEL_DIR", project_root / "models"))
     default_sample_sop_path = data_dir / "samples" / "temp_sop.pdf"
-    legacy_sample_sop_path = project_root / "01-App" / "temp_sop.pdf"
-    sample_sop_fallback = default_sample_sop_path
-    if not default_sample_sop_path.exists() and legacy_sample_sop_path.exists():
-        sample_sop_fallback = legacy_sample_sop_path
-    sample_sop_path = Path(os.getenv("SAMPLE_SOP_PATH", sample_sop_fallback))
+    sample_sop_path = Path(os.getenv("SAMPLE_SOP_PATH", default_sample_sop_path))
     yolo_weights_path = Path(
         os.getenv("YOLO_WEIGHTS_PATH", models_dir / DEFAULT_YOLO_WEIGHTS_FILENAME)
     )

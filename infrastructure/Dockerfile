@@ -24,7 +24,6 @@ RUN python -m pip install --upgrade pip \
 RUN mkdir -p /app/data /app/models
 
 COPY src ./src
-COPY 01-App ./01-App
 COPY README.md ./README.md
 COPY feature-requests.txt ./feature-requests.txt
 
