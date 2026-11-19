@@ -18,3 +18,5 @@ tests
 *.jpg
 *.png
 *.csv
+.railway/node_modules/
+.railway/.cac-migration.json

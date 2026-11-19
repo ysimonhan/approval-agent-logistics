@@ -195,3 +195,7 @@ models/
 
 # VS Code
 .vscode/
+
+# Railway IaC local dependencies & cutover snapshot
+.railway/node_modules/
+.railway/.cac-migration.json
